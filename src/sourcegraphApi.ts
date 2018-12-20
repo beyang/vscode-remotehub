@@ -39,8 +39,9 @@ export class SourcegraphApi implements Disposable {
     private _client: GraphQLClient | undefined;
     get client(): GraphQLClient {
         if (this._client === undefined) {
-            this._client = new GraphQLClient('https://sourcegraph.com/.api/graphql');
+            this._client = new GraphQLClient('http://localhost:7080/.api/graphql');
         }
+        this._client.setHeader("Authorization", "token 5ad69ad142ba0face311abb15328b3facb3417ff")
         return this._client;
     }
 
@@ -349,11 +350,14 @@ export class SourcegraphApi implements Disposable {
             }
         ];
 
-        const url = `https://sourcegraph.com/.api/xlang/${method}`;
+        const url = `http://localhost:7080/.api/xlang/${method}`;
         Logger.log(`Sourcegraph.lsp(${url})\n\t${JSON.stringify(body)}`);
 
         try {
             const resp = await fetch(url, {
+                headers: {
+                    "Authorization": "token 5ad69ad142ba0face311abb15328b3facb3417ff"
+                },
                 method: 'POST',
                 body: JSON.stringify(body)
             });
